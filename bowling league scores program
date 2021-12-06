@@ -1,0 +1,92 @@
+// Week 06 - Programming Assignment.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// @Author : Andreh Naisan
+//
+
+#include<iostream>
+#include<iomanip>
+#include<fstream> // to open a txt file
+using namespace std;
+#define PLAYERS 10 // to read the names and count of players
+
+//**some comments are for github**
+
+//Function that gets the bowling data
+bool GetBowlingData(char PlayersNames[][100], int PlayersScores[][5], int& Numbers) {//int PlayersScores[][5]
+
+	ifstream in("BowlingScores.txt");// to search and open the txt file and read it
+
+	if (!in.fail()) { //Checking status of file
+
+		while (!in.eof()) {
+
+			in >> PlayersNames[Numbers] >> PlayersScores[Numbers][0] >> PlayersScores[Numbers][1] >> PlayersScores[Numbers][2] >> PlayersScores[Numbers][3] >> PlayersScores[Numbers][4];//PlayersScores[Numbers][4]
+			Numbers++;
+
+		}
+		return true;//if file is read correcly will open 
+	}
+	return false;//if file is read incorrecly will close
+}
+
+//GetAverageScore function takes scores and AveragesScores as input
+void GetAverageScore(int PlayersScores[][5], double AverageScores[], int Numbers) {//PlayersScores[][5]
+
+	for (int i = 0; i < Numbers; i++) {
+
+		AverageScores[i] = 0;
+
+		for (int j = 0; j < 5; j++) {//j<5
+
+			AverageScores[i] += PlayersScores[i][j];
+		}
+		AverageScores[i] /= 5.0;// /=5.0
+
+	}
+
+}
+
+//function that prints the results
+void PrettyPrintResults(char PlayersNames[][100], int PlayersScores[][5], double AverageScores[], int Numbers) {//PlayersScores[][5]
+
+	cout << left << setw(15) << "Player Name " << "Score(1)\t\tScore(2)\tScore(3)\tScore(4)\tScore(5)\tAverage Score\n" << endl;// \tScore(5)
+
+	for (int i = 0; i < Numbers; i++) {
+		cout << left << setw(15) << PlayersNames[i] << "\t";
+
+		for (int j = 0; j < 5; j++) // j<5
+
+			cout << PlayersScores[i][j] << "\t\t";// /t
+		cout << AverageScores[i] << endl;
+
+	}
+
+}
+
+int main() {
+	
+	//declaring variables
+	char PlayersNames[PLAYERS][100];//
+	int PlayersScores[PLAYERS][5];//[5]
+	double AverageScores[PLAYERS];
+	int Numbers = 0;
+
+	//program intro
+	cout << setw(75) << setfill('*') << "*" << endl;
+	cout << setw(50) << setfill('*') << " Welcome to Bowling league Scores " << setw(24) << setfill('*') << "*" << endl;
+	cout << setw(75) << setfill('*') << "*" << endl;
+	cout << "\n" << endl;
+
+		//call GetBowlingData
+	if (GetBowlingData(PlayersNames, PlayersScores, Numbers)) {
+
+		//call GetAverageScore to store the average scores
+		GetAverageScore(PlayersScores, AverageScores, Numbers);
+
+		//call PrettyPrintResults function to print the results
+		PrettyPrintResults(PlayersNames, PlayersScores, AverageScores, Numbers);
+	}
+	//to end the program when any key is pressed
+	system("pause");
+	return 0;
+
+}
